@@ -1,0 +1,42 @@
+# This file defines commit rules for the project.
+# Each rule contains the following fields:
+#
+# - id: A unique identifier for the rule (string).
+# - description: A brief description of the rule's purpose (string).
+# - check: The function or method to be executed for this rule (string).
+# - component: The component to which the rule applies. Possible values are:
+#   - HEADER: Rule applies to the header component.
+#   - FOOTER: Rule applies to the footer component.
+#   - BODY: Rule applies to the body component.
+# - severity: The level of severity for the rule violation. Possible values are:
+#   - ERROR: Indicates a serious issue that must be addressed.
+#   - WARNING: Indicates a minor issue that should be addressed.
+#   - INFO: Provides informational messages or suggestions.
+# - dependencies: Other rules that this rule depends on. This can be:
+#   - null: No dependencies.
+#   - []: An empty list, indicating no dependencies.
+#   - [dependency1, dependency2]: A list of dependent rule IDs.
+#
+# Example usage:
+# - id: "01"
+#   description: "Check header length"
+#   check: check_header
+#   component: HEADER
+#   severity: ERROR
+#   dependencies: null
+#
+# Define your rules below:
+
+- id: "01"
+  description: "Check header length"
+  check: length # remove
+  component: HEADER # remove
+  severity: WARNING
+  dependencies: null 
+
+- id: "02"
+  description: "Tries to find a colon ':' in the header preceded by exactly one word"
+  check: has_type # remove
+  component: HEADER # remove
+  severity: ERROR
+  dependencies: null

@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "comeit"
+version = "0.1.0"
+description = "A pure Python project enforcing conventional commits."
+authors = ["Your Name <marius_gulbrandsen@hotmail.no>"]
+readme = "docs/README.md"
+license = "MIT"
+packages = [{include = "comeit"}]
+keywords = ["conventional commits", "git", "python", "commits", "commit"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pyyaml = "6.0.2"
+rich = "13.7.1"
+
+[tool.poetry.dev-dependencies]
+pytest = "^7.0"
+pre-commit = "^3.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+comeit = "comeit.__main__:main"
