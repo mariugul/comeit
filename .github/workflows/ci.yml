@@ -64,3 +64,44 @@ jobs:
         FORMAT_LOG=$(cat ruff-format.log || echo "No format log found.")
         echo "$FORMAT_LOG" >> $GITHUB_STEP_SUMMARY
         echo '```' >> $GITHUB_STEP_SUMMARY
+
+  unit-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    - uses: Gr1N/setup-poetry@v9
+      with:
+        poetry-version: "1.8.2"
+
+    - uses: actions/cache@v4
+      with:
+        path: ~/.cache/pypoetry/virtualenvs
+        key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
+    - run: poetry --version
+
+    - name: Install dependencies
+      id: install
+      run: poetry install  # Install all dependencies including dev
+
+    - name: Run Pytest
+      if: steps.install.outcome == 'success'
+      run: |
+        set -o pipefail
+        poetry run pytest --maxfail=5 --disable-warnings 2>&1 | tee pytest.log
+
+    - name: Post Summary
+      if: always()
+      run: |
+        echo "### Pytest Results" >> $GITHUB_STEP_SUMMARY
+        echo '```' >> $GITHUB_STEP_SUMMARY
+        TEST_LOG=$(cat pytest.log || echo "No test log found.")
+        echo "$TEST_LOG" >> $GITHUB_STEP_SUMMARY
+        echo '```' >> $GITHUB_STEP_SUMMARY
