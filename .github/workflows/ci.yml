@@ -7,6 +7,10 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 
+env:
+  PYTHON_VERSION: '3.10'
+  POETRY_VERSION: '1.8.2'
+
 jobs:
   code-quality:
     runs-on: ubuntu-latest
@@ -18,11 +22,12 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.10'
+        python-version: ${{ env.PYTHON_VERSION }}
 
     - uses: Gr1N/setup-poetry@v9
       with:
-        poetry-version: "1.8.2"
+        poetry-version: ${{ env.POETRY_VERSION }}
+
 
     - uses: actions/cache@v4
       with:
@@ -75,11 +80,11 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.10'
+        python-version: ${{ env.PYTHON_VERSION }}
 
     - uses: Gr1N/setup-poetry@v9
       with:
-        poetry-version: "1.8.2"
+        poetry-version: ${{ env.POETRY_VERSION }}
 
     - uses: actions/cache@v4
       with:
@@ -116,11 +121,11 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.10'
+        python-version: ${{ env.PYTHON_VERSION }}
 
     - uses: Gr1N/setup-poetry@v9
       with:
-        poetry-version: "1.8.2"
+        poetry-version: ${{ env.POETRY_VERSION }}
 
     - uses: actions/cache@v4
       with:
