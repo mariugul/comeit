@@ -1,15 +1,16 @@
-from pathlib import Path
-from .rule_loader import RuleConfig
-from .rule import Rule, Component
-from ..checks.body import Body
-from ..checks.header import Header
-from ..checks.footer import Footer
 import logging
+
+from ..checks.body import Body
+from ..checks.footer import Footer
+from ..checks.header import Header
+from .rule import Component, Rule
+from .rule_loader import RuleConfig
 
 log = logging.getLogger(__name__)
 
+
 class RuleCreator:
-    """Creates the rules from the values in the rules config yaml file"""
+    """Creates the rules from the values in the rules config yaml file."""
 
     def __init__(
         self,
@@ -37,7 +38,6 @@ class RuleCreator:
         else:
             raise Exception("Unknown component. Can't create rule.")
 
-
         # Check if the method exists and call it
         if callable(check_method):
             log.debug(f"Found method {rule_config.check}. Creating rule {rule_config.id}...")
@@ -50,5 +50,5 @@ class RuleCreator:
             check=check_method,
             component=rule_config.component,
             severity=rule_config.severity,
-            dependencies=rule_config.dependencies
+            dependencies=rule_config.dependencies,
         )

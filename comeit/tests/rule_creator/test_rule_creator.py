@@ -1,17 +1,17 @@
 from comeit import (
-    RuleCreator,
-    RuleConfig,
-    Severity,
     Body,
-    Header,
-    Footer,
-    Rule,
     Component,
+    Footer,
+    Header,
+    Rule,
+    RuleConfig,
+    RuleCreator,
+    Severity,
 )
 
 
 def test_rule_creator():
-    """Verifies that rules can indeed be created from a config"""
+    """Verifies that rules can indeed be created from a config."""
     rule_configs = [
         RuleConfig(
             id="01",
@@ -23,7 +23,8 @@ def test_rule_creator():
         ),
         RuleConfig(
             id="02",
-            description="Tries to find a colon ':' in the header preceded by exactly one word",
+            description=
+            "Tries to find a colon ':' in the header preceded by exactly one word",
             check="has_type",
             component="HEADER",
             severity=Severity.ERROR,
@@ -46,7 +47,8 @@ def test_rule_creator():
         ),
         "02": Rule(
             id="02",
-            description="Tries to find a colon ':' in the header preceded by exactly one word",
+            description=
+            "Tries to find a colon ':' in the header preceded by exactly one word",
             check=header.has_type,
             component=Component.HEADER,
             severity=Severity.ERROR,
