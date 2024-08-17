@@ -1,19 +1,28 @@
 import logging
 from pathlib import Path
+
 from rich.console import Console
 from rich.table import Table
 
-from comeit import Body, Footer, Header, Rule, RuleConfig, RuleCreator, RuleLoader, RuleManager
+from comeit import (
+    Body,
+    Footer,
+    Header,
+    Rule,
+    RuleConfig,
+    RuleCreator,
+    RuleLoader,
+    RuleManager,
+)
 
 logger = logging.getLogger("comeit")
 
 CONVENTIONAL_TYPES = set(["feat", "fix"])
-DEFAULT_TYPES = set(
-    ["build", "chore", "ci", "docs", "perf", "refactor", "revert", "style", "test"]
-)
-MAX_HEADER_LENGTH = 52 # Make this a config later
-MAX_BODY_LENGTH = 70 # Make this a config later
-MAX_FOOTER_LENGTH = 52 # Make this a config later
+DEFAULT_TYPES = set(["build", "chore", "ci", "docs", "perf", "refactor", "revert", "style", "test"])
+MAX_HEADER_LENGTH = 52  # Make this a config later
+MAX_BODY_LENGTH = 70  # Make this a config later
+MAX_FOOTER_LENGTH = 52  # Make this a config later
+
 
 def init_rules(types: set[str], commit_msg: tuple[str, str, str]) -> dict[str, Rule]:
     # Init check classes
@@ -26,12 +35,11 @@ def init_rules(types: set[str], commit_msg: tuple[str, str, str]) -> dict[str, R
     loaded_rules: list[RuleConfig] = rule_loader.load_rules()
 
     # Create rule objects
-    rule_creator = RuleCreator(
-        rule_configs=loaded_rules, header=header, body=body, footer=footer
-    )
+    rule_creator = RuleCreator(rule_configs=loaded_rules, header=header, body=body, footer=footer)
     rules: dict[str, Rule] = rule_creator.create_rules()
 
     return rules
+
 
 def parse_commit_message(commit_message: str):
     lines = commit_message.strip().split("\n")
@@ -49,13 +57,16 @@ def parse_commit_message(commit_message: str):
 
 
 def create_commit_types(extra_types: list[str] = None, custom_types: list[str] = None) -> set[str]:
-    """Create commit types from default types and/or custom types or extra types
+    """Create commit types from default types and/or custom types or extra types.
 
     Args:
+    ----
         extra_types (list[str]): Adds extra types to the default types.
-        custom_types (list[str], optional): Create your own types. This will disgard the default
-            types, however it keeps "feat" and "fix" as they are required. Specifying this overrides
-            the `extra_types` if it was given. Defaults to None.
+        custom_types (list[str], optional): Create your own types. This will disgard the
+            default types, however it keeps "feat" and "fix" as they are required.
+            Specifying this overrides the `extra_types` if it was given. Defaults to
+            None.
+
     """
     types = CONVENTIONAL_TYPES
 
@@ -66,15 +77,18 @@ def create_commit_types(extra_types: list[str] = None, custom_types: list[str] =
     else:
         types |= DEFAULT_TYPES
 
-    logger.debug("Allowed commit types: %s", '|'.join(types))
+    logger.debug("Allowed commit types: %s", "|".join(types))
     return types
+
 
 # Make a commit parser file
 def commit_parser():
-    """Parse out header, body and footer"""
+    """Parse out header, body and footer."""
+
 
 def configure_logger():
     logging.basicConfig(level=logging.DEBUG)
+
 
 def main():
     configure_logger()
@@ -91,7 +105,7 @@ def main():
     logger.info("Listing rules...")
     for rule_id, rule in rules.items():
         logger.debug("%s", rule)
-    
+
     logger.info("Applying rules to commit %s", commit_msg)
     rule_manager = RuleManager(rules)
 
@@ -107,13 +121,13 @@ def main():
     table.add_column("Description", justify="left")
     for rule_id, result in results.items():
         rule = rules[rule_id]
-    
-        status = '✅' if result else ('❌' if result is not None else '👻')
+
+        status = "✅" if result else ("❌" if result is not None else "👻")
 
         # Warnings are always pass
         if rule.severity.is_warning():
-            status = '🚧'
- 
+            status = "🚧"
+
         table.add_row(rule_id, status, rule.severity.emoji, rule.description)
 
         if result is False and rule.severity.is_error():

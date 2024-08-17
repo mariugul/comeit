@@ -1,8 +1,10 @@
+from dataclasses import dataclass
+from pathlib import Path
+
 import yaml
 
-from pathlib import Path
-from dataclasses import dataclass
-from .rule import Severity, Component
+from .rule import Component, Severity
+
 
 @dataclass
 class RuleConfig:
@@ -18,12 +20,19 @@ class RuleConfig:
         try:
             self.severity = Severity(self.severity)
         except (KeyError, ValueError) as e:
-            raise ValueError(f"Severity field in rules.yml has invalid value. {e}. Choose from {Severity.get_members()}")
-        
+            raise ValueError(
+                f"Severity field in rules.yml has invalid value. {e}. "
+                "Choose from {Severity.get_members()}"
+            )
+
         try:
             self.component = Component(self.component)
         except (KeyError, ValueError) as e:
-            raise ValueError(f"Component field in rules.yml has invalid value. {e}. Choose from {Component.get_members()}")
+            raise ValueError(
+                f"Component field in rules.yml has invalid value. {e}. "
+                "Choose from {Component.get_members()}"
+            )
+
 
 class RuleLoader:
     def __init__(self, rules_yml: Path = Path("rules.yml")) -> None:
@@ -36,9 +45,11 @@ class RuleLoader:
         except FileNotFoundError:
             raise FileNotFoundError(f"Error: The file '{self._rules_yml}' was not found.")
         except yaml.YAMLError as e:
-            raise yaml.YAMLError(f"Error: Failed to parse YAML file '{self._rules_yml}'. Details: {e}")
-        except IOError as e:
-            raise IOError(f"Error: An I/O error occurred while reading the file '{self._rules_yml}'. Details: {e}")
+            raise yaml.YAMLError(
+                f"Error: Failed to parse YAML file '{self._rules_yml}'. Details: {e}"
+            )
+        except OSError as e:
+            raise OSError(f"An I/O error occurred while reading '{self._rules_yml}'. Details: {e}")
         except Exception as e:
             raise Exception(f"Error: An unexpected error occurred. Details: {e}")
 

@@ -1,10 +1,10 @@
-from .rules.rule_loader import RuleLoader, RuleConfig, Severity
-from .rules.rule_manager import RuleManager
-from .rules.rule_creator import RuleCreator
-from .rules.rule import Rule, Component, Severity
 from .checks.body import Body
 from .checks.footer import Footer
-from.checks.header import Header
+from .checks.header import Header
+from .rules.rule import Component, Rule, Severity
+from .rules.rule_creator import RuleCreator
+from .rules.rule_loader import RuleConfig, RuleLoader
+from .rules.rule_manager import RuleManager
 
 __all__ = [
     RuleLoader.__name__,
@@ -18,5 +18,4 @@ __all__ = [
     Rule.__name__,
     Component.__name__,
     Severity.__name__,
-
 ]
