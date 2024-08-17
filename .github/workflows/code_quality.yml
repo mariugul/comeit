@@ -1,0 +1,66 @@
+name: Code Quality
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  code-quality:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    - uses: Gr1N/setup-poetry@v9
+      with:
+        poetry-version: "1.8.2"
+
+    - uses: actions/cache@v4
+      with:
+        path: ~/.cache/pypoetry/virtualenvs
+        key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
+    - run: poetry --version
+
+    - name: Install dev dependencies
+      id: install
+      run: poetry install  # Install all dependencies including dev
+
+    - name: Ruff Lint
+      if: steps.install.outcome == 'success'
+      id: ruff-lint
+      run: |
+        poetry run ruff check > ruff-lint.log
+        ruff_check_exit_code=$?
+        cat ruff-lint.log
+        exit $ruff_check_exit_code
+
+    - name: Ruff Format
+      if: always() && steps.install.outcome == 'success'
+      id: ruff-format
+      run: |
+        set -o pipefail
+        poetry run ruff format --check 2>&1 | tee ruff-format.log 
+
+    - name: Post Summary
+      if: always()
+      run: |
+        echo "### Ruff Lint Results" >> $GITHUB_STEP_SUMMARY
+        echo '```' >> $GITHUB_STEP_SUMMARY
+        LINT_LOG=$(cat ruff-lint.log || echo "No lint log found.")
+        echo "$LINT_LOG" >> $GITHUB_STEP_SUMMARY
+        echo '```' >> $GITHUB_STEP_SUMMARY
+
+        echo "### Ruff Format Results" >> $GITHUB_STEP_SUMMARY
+        echo '```' >> $GITHUB_STEP_SUMMARY
+        FORMAT_LOG=$(cat ruff-format.log || echo "No format log found.")
+        echo "$FORMAT_LOG" >> $GITHUB_STEP_SUMMARY
+        echo '```' >> $GITHUB_STEP_SUMMARY
