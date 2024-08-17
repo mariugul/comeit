@@ -105,3 +105,47 @@ jobs:
         TEST_LOG=$(cat pytest.log || echo "No test log found.")
         echo "$TEST_LOG" >> $GITHUB_STEP_SUMMARY
         echo '```' >> $GITHUB_STEP_SUMMARY
+
+  integrations-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    - uses: Gr1N/setup-poetry@v9
+      with:
+        poetry-version: "1.8.2"
+
+    - uses: actions/cache@v4
+      with:
+        path: ~/.cache/pypoetry/virtualenvs
+        key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
+    - run: poetry --version
+
+    - name: Run Poetry Lock
+      run: poetry lock
+
+    - name: Install dependencies
+      id: install
+      run: poetry install  # Install all dependencies including dev
+
+    - name: Run Comeit
+      if: steps.install.outcome == 'success'
+      run: |
+        set -o pipefail
+        poetry run comeit 2>&1 | tee comeit.log
+
+    - name: Post Summary
+      if: always()
+      run: |
+        echo "### Comeit Results" >> $GITHUB_STEP_SUMMARY
+        echo '```' >> $GITHUB_STEP_SUMMARY
+        COMEIT_LOG=$(cat comeit.log || echo "No comeit log found.")
+        echo "$COMEIT_LOG" >> $GITHUB_STEP_SUMMARY
+        echo '```' >> $GITHUB_STEP_SUMMARY
