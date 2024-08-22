@@ -1,0 +1,46 @@
+name: Python Package Dispatch
+
+on:
+  workflow_dispatch: # Allows manual triggering of the workflow
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    env:
+      POETRY_HOME: /opt/poetry
+      VENV_PATH: venv
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.8"
+
+      - name: Cache Python dependencies
+        id: cache-python-deps
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.VENV_PATH }}
+          key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
+          restore-keys: |
+            venv-${{ runner.os }}-
+
+      - name: Install Poetry
+        if: steps.cache-python-deps.outputs.cache-hit != 'true'
+        run: |
+          python3 -m venv $POETRY_HOME
+          ${{ env.VENV_PATH }}/bin/pip install poetry==1.8.2
+          ${{ env.VENV_PATH }}/bin/poetry --version
+
+      - name: Install Package
+        run: |
+          ${{ env.VENV_PATH }}/bin/poetry install
+
+      - name: Build Package
+        run: |
+          ${{ env.VENV_PATH }}/bin/poetry build
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
