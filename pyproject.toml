@@ -2,11 +2,14 @@
 name = "comeit"
 version = "0.1.0"
 description = "A pure Python project enforcing conventional commits."
-authors = ["Your Name <marius_gulbrandsen@hotmail.no>"]
+authors = ["Marius Gulbrandsen <marius_gulbrandsen@hotmail.no>"]
 readme = "docs/README.md"
 license = "MIT"
 packages = [{include = "comeit"}]
 keywords = ["conventional commits", "git", "python", "commits", "commit"]
+repository = "https://github.com/mariugul/comeit"
+homepage = "https://github.com/mariugul/comeit"
+documentation = "https://example.com"
 
 [tool.poetry.dependencies]
 python = "^3.10"
