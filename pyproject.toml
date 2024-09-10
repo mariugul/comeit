@@ -23,6 +23,13 @@ ruff = "0.6.1"
 isort = "^5.13.2"
 black = "^24.8.0"
 
+[tool.poetry.group.docs.dependencies]
+sphinx = "^7.0.0"
+sphinx-rtd-theme = "^2.0.0"
+sphinx-autobuild = "^2024.4.16"
+sphinx-copybutton = "^0.5.2"
+myst-parser = "^4.0.0"
+
 [tool.black]
 line-length = 100
 target-version = ["py310"]
