@@ -42,26 +42,8 @@ jobs:
         with:
           python-version: "3.8"
 
-      - name: Cache Poetry Install
-        id: cache-poetry
-        uses: actions/cache@v4
-        with:
-          path: |
-            /opt/poetry
-            ~/.cache/pypoetry
-            .venv
-          key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}-${{ hashFiles('**/pyproject.toml') }}
-
       - name: Install Poetry
-        if: steps.cache-poetry.outputs.cache-hit != 'true'
-        run: |
-          export POETRY_HOME=/opt/poetry
-          python3 -m venv $POETRY_HOME
-          $POETRY_HOME/bin/pip install poetry==1.8.2
-          $POETRY_HOME/bin/poetry --version
-
-      - name: Add Poetry to PATH
-        run: echo "/opt/poetry/bin" >> $GITHUB_PATH
+        run: pipx install poetry==1.8.2
 
       - name: Install Package
         run: poetry install --no-interaction --no-ansi
