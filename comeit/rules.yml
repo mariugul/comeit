@@ -11,7 +11,6 @@
 # - severity: The level of severity for the rule violation. Possible values are:
 #   - ERROR: Indicates a serious issue that must be addressed.
 #   - WARNING: Indicates a minor issue that should be addressed.
-#   - INFO: Provides informational messages or suggestions.
 # - dependencies: Other rules that this rule depends on. This can be:
 #   - null: No dependencies.
 #   - []: An empty list, indicating no dependencies.
@@ -29,14 +28,21 @@
 
 - id: "01"
   description: "Check header length"
-  check: length # remove
-  component: HEADER # remove
-  severity: WARNING
+  check: length 
+  component: HEADER 
+  severity: ERROR
   dependencies: null 
 
 - id: "02"
   description: "Tries to find a colon ':' in the header preceded by exactly one word"
-  check: has_type # remove
-  component: HEADER # remove
+  check: has_type 
+  component: HEADER 
   severity: ERROR
-  dependencies: null
+  dependencies: null 
+
+- id: "03"
+  description: "Cannot have a ':' with no [a-z] char preceding it"
+  check: has_type 
+  component: HEADER 
+  severity: ERROR
+  dependencies: ["02"] 
