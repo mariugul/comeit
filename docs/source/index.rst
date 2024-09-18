@@ -6,13 +6,12 @@
 comeit documentation
 ====================
 
-Add your content using ``reStructuredText`` syntax. See the
-`reStructuredText <https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html>`_
-documentation for details.
+Lint git commits in a Conventional Commits manner in pure Python.
 
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
+   get_started
    rules_config
