@@ -26,7 +26,7 @@ class Header:
         log.debug(f"Running {self.length.__name__}()")
 
         success = False
-        error_msg = f"Exceeded header length. {100}/{self._max_len}"
+        error_msg = f"Exceeded header length {100}/{self._max_len}."
 
         if success:
             return True, ""
@@ -41,12 +41,12 @@ class Header:
         log.debug(f"Running {self.has_type.__name__}()")
 
         success = True
-        error_msg = "No colon found. Cannot identify a type."
+        msg = "No colon found. Cannot identify a type."
 
         if success:
             return True, ""
         else:
-            return False, error_msg
+            return False, msg
 
     # Dependent on "has_type() to be True if this should run"
     def type_empty(self, types: set):

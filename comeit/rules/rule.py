@@ -16,7 +16,9 @@ class Severity(Enum):
 
     ERROR = "ERROR"
     WARNING = "WARNING"
-    INFO = "INFO"
+    # TODO: Remove INFO
+    # INFO was a choice but it doesn't seem like something useful when we have IGNORE.
+    # INFO = "INFO"
     IGNORE = "IGNORE"
 
     def is_error(self):
@@ -25,8 +27,9 @@ class Severity(Enum):
     def is_warning(self):
         return self == Severity.WARNING
 
-    def is_info(self):
-        return self == Severity.INFO
+    # TODO: Remove INFO
+    # def is_info(self):
+    #     return self == Severity.INFO
 
     def is_ignore(self):
         return self == Severity.IGNORE
@@ -118,7 +121,8 @@ class Rule:
         self.component = component
         self.severity = severity
         self.dependencies = dependencies if dependencies else []
-        self.error_message: str = ""
+        self.message: str = ""
+        self.has_run: bool = False
 
     def apply(self, *args, **kwargs) -> tuple[bool, str]:
         """Executes the rule's check function with the provided arguments.
