@@ -115,25 +115,41 @@ def main():
     # Display results
     console = Console()
     table = Table(title="Rules Summary")
-    table.add_column("Rule", justify="center")
+    table.add_column("Rule", justify="left")
     table.add_column("Pass", justify="center")
-    table.add_column("Severity", justify="center")
+    # table.add_column("Severity", justify="center")
     table.add_column("Description", justify="left")
     for rule_id, result in results.items():
         rule = rules[rule_id]
 
-        status = "✅" if result else ("❌" if result is not None else "👻")
+        if result.is_success():
+            status = "✅"
+        elif result.is_failed():
+            status = "❌"
+        elif result.is_ignored():
+            status = "👻"
+        else:
+            raise ValueError(f"Unknown {result=}")
 
         # Warnings are always pass
         if rule.severity.is_warning():
             status = "🚧"
 
-        table.add_row(rule_id, status, rule.severity.emoji, rule.description)
+        rule_name = (
+            f"{rule.component.value.title()} {rule.check.__name__.replace('_', ' ').title()}"
+        )
+        table.add_row(f"{rule_id} - {rule_name}", status, rule.description)
 
-        if result is False and rule.severity.is_error():
-            table.add_row("", "", "", f"[bold red]{rule.error_message}[/bold red]")
-        elif result is False and rule.severity.is_warning():
-            table.add_row("", "", "", f"[bold yellow]{rule.error_message}[/bold yellow]")
+        if result.is_failed() and rule.severity.is_error():
+            table.add_row(
+                f"[bold red]{' ' * 7}Error[/bold red]", "", f"[bold red]  {rule.message}[/bold red]"
+            )
+        elif result.is_failed() and rule.severity.is_warning():
+            table.add_row(
+                f"[bold yellow]{' ' * 7}Warning[/bold yellow]",
+                "",
+                f"[bold yellow]  {rule.message}[/bold yellow]",
+            )
 
     console.print(table)
 
