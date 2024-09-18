@@ -6,7 +6,7 @@ from comeit import RuleConfig, RuleLoader, Severity
 def test_load_rules_from_yml_file():
     """Verifies that rules can be loaded from the rules yaml file."""
     rules_yml = Path(__file__).parent / "rules.yml"
-    rule_loader = RuleLoader(rules_yml=rules_yml)
+    rule_loader = RuleLoader(user_rules_yml=rules_yml)
     rules = rule_loader.load_rules()
 
     expected_list = [
