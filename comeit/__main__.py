@@ -14,6 +14,7 @@ from comeit import (
     RuleLoader,
     RuleManager,
 )
+from comeit.parse_args import parse_args
 
 logger = logging.getLogger("comeit")
 
@@ -24,14 +25,16 @@ MAX_BODY_LENGTH = 70  # Make this a config later
 MAX_FOOTER_LENGTH = 52  # Make this a config later
 
 
-def init_rules(types: set[str], commit_msg: tuple[str, str, str]) -> dict[str, Rule]:
+def init_rules(
+    types: set[str], commit_msg: tuple[str, str, str], user_rules_yml: Path = None
+) -> dict[str, Rule]:
     # Init check classes
     header = Header(types=types, max_length=MAX_HEADER_LENGTH, commit_msg=commit_msg[0])  # FINISH
     body = Body()
     footer = Footer()
 
     # Load rules from yaml config
-    rule_loader = RuleLoader(user_rules_yml=Path("commit_rules.yml"))
+    rule_loader = RuleLoader(user_rules_yml=user_rules_yml)
     loaded_rules: list[RuleConfig] = rule_loader.load_rules()
 
     # Create rule objects
@@ -91,6 +94,7 @@ def configure_logger():
 
 
 def main():
+    args = parse_args()
     configure_logger()
 
     logger.info("Creating allowed commit types...")
@@ -100,7 +104,9 @@ def main():
     commit_msg = ("feat: this is a feature", "", "")
 
     logger.info("Initializing rules...")
-    rules = init_rules(types=allowed_commit_types, commit_msg=commit_msg)
+    rules = init_rules(
+        types=allowed_commit_types, commit_msg=commit_msg, user_rules_yml=args.config_file
+    )
 
     logger.info("Listing rules...")
     for rule_id, rule in rules.items():

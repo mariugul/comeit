@@ -41,33 +41,44 @@ class RuleConfig:
 class RuleLoader:
     def __init__(self, user_rules_yml: Path | None = None) -> None:
         self._DEFAULT_RULES_YML = Path("default_rules.yml")
+        self._OVERRIDE_RULES_YML = Path("comeit_config.yml")
         self._user_rules_yml = user_rules_yml
 
     def load_rules(self) -> list[RuleConfig]:
         try:
             with importlib.resources.open_text("comeit", self._DEFAULT_RULES_YML) as f:
                 rules_data = yaml.safe_load(f)
-                logger.debug(f"{rules_data=}")
 
-            if self._user_rules_yml:
-                with self._user_rules_yml.open() as f:
+            logger.debug(f"{rules_data=}")
+
+            # Determine which file to use for overrides
+            override_file = None
+            if self._user_rules_yml is not None:  # If the user provides a file
+                if self._user_rules_yml.exists():
+                    override_file = self._user_rules_yml
+                else:
+                    logger.warning(
+                        f"User-specified rules file '{self._user_rules_yml}' not found. Skipping."
+                    )
+            elif self._OVERRIDE_RULES_YML.exists():  # Fall back to system-wide override if provided
+                override_file = self._OVERRIDE_RULES_YML
+                logger.debug(f"Using system-wide override: {self._OVERRIDE_RULES_YML}")
+
+            # If an override file exists, load it and apply the overrides
+            if override_file:
+                with override_file.open() as f:
                     user_rules_data: dict[str] = yaml.safe_load(f)
-                    logger.debug(f"{user_rules_data}")
+                logger.debug(f"User or system rules loaded: {user_rules_data}")
 
+                # Apply user overrides to default rules
                 for rule in rules_data:
                     rule_id = rule["id"]
                     if rule_id in user_rules_data:
                         rule["severity"] = user_rules_data[rule_id]
+                        logger.debug(
+                            f"Overriding severity for rule {rule_id} to {user_rules_data[rule_id]}"
+                        )
 
-        except FileNotFoundError as e:
-            logger.error(e)
-            raise
-        except yaml.YAMLError as e:
-            logger.error(e)
-            raise
-        except OSError as e:
-            logger.error(e)
-            raise
         except Exception as e:
             logger.error(e)
             raise
