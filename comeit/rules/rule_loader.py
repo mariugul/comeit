@@ -39,7 +39,7 @@ class RuleConfig:
 
 
 class RuleLoader:
-    def __init__(self, rules_yml: Path = Path("rules.yml")) -> None:
+    def __init__(self, rules_yml: Path = Path("default_rules.yml")) -> None:
         self._rules_yml = rules_yml
 
     def load_rules(self) -> list[RuleConfig]:

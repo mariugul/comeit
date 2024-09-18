@@ -31,7 +31,7 @@ def init_rules(types: set[str], commit_msg: tuple[str, str, str]) -> dict[str, R
     footer = Footer()
 
     # Load rules from yaml config
-    rule_loader = RuleLoader(Path("rules.yml"))
+    rule_loader = RuleLoader(Path("default_rules.yml"))
     loaded_rules: list[RuleConfig] = rule_loader.load_rules()
 
     # Create rule objects
