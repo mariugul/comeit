@@ -39,13 +39,26 @@ class RuleConfig:
 
 
 class RuleLoader:
-    def __init__(self, rules_yml: Path = Path("default_rules.yml")) -> None:
-        self._rules_yml = rules_yml
+    def __init__(self, user_rules_yml: Path | None = None) -> None:
+        self._DEFAULT_RULES_YML = Path("default_rules.yml")
+        self._user_rules_yml = user_rules_yml
 
     def load_rules(self) -> list[RuleConfig]:
         try:
-            with importlib.resources.open_text("comeit", self._rules_yml) as f:
+            with importlib.resources.open_text("comeit", self._DEFAULT_RULES_YML) as f:
                 rules_data = yaml.safe_load(f)
+                logger.debug(f"{rules_data=}")
+
+            if self._user_rules_yml:
+                with self._user_rules_yml.open() as f:
+                    user_rules_data: dict[str] = yaml.safe_load(f)
+                    logger.debug(f"{user_rules_data}")
+
+                for rule in rules_data:
+                    rule_id = rule["id"]
+                    if rule_id in user_rules_data:
+                        rule["severity"] = user_rules_data[rule_id]
+
         except FileNotFoundError as e:
             logger.error(e)
             raise
