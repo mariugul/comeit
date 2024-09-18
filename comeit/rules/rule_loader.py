@@ -1,9 +1,13 @@
+import importlib.resources
+import logging
 from dataclasses import dataclass
 from pathlib import Path
 
 import yaml
 
 from .rule import Component, Severity
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -40,19 +44,20 @@ class RuleLoader:
 
     def load_rules(self) -> list[RuleConfig]:
         try:
-            with self._rules_yml.open() as file:
-                rules_data = yaml.safe_load(file)
-        except FileNotFoundError:
-            raise FileNotFoundError(f"Error: The file '{self._rules_yml}' was not found.")
+            with importlib.resources.open_text("comeit", self._rules_yml) as f:
+                rules_data = yaml.safe_load(f)
+        except FileNotFoundError as e:
+            logger.error(e)
+            raise
         except yaml.YAMLError as e:
-            raise yaml.YAMLError(
-                f"Error: Failed to parse YAML file '{self._rules_yml}'. Details: {e}"
-            )
+            logger.error(e)
+            raise
         except OSError as e:
-            raise OSError(f"An I/O error occurred while reading '{self._rules_yml}'. Details: {e}")
+            logger.error(e)
+            raise
         except Exception as e:
-            raise Exception(f"Error: An unexpected error occurred. Details: {e}")
+            logger.error(e)
+            raise
 
-        # config = {RuleConfig(**d) for d in rules_data}
         config = [RuleConfig(**d) for d in rules_data]
         return config
