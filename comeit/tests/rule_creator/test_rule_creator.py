@@ -47,8 +47,7 @@ def test_rule_creator():
         ),
         "02": Rule(
             id="02",
-            description=
-            "Tries to find a colon ':' in the header preceded by exactly one word",
+            description="Tries to find a colon ':' in the header preceded by exactly one word",
             check=header.has_type,
             component=Component.HEADER,
             severity=Severity.ERROR,

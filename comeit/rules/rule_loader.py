@@ -40,16 +40,14 @@ class RuleConfig:
 
 class RuleLoader:
     def __init__(self, user_rules_yml: Path | None = None) -> None:
-        self._DEFAULT_RULES_YML = Path("default_rules.yml")
+        self._DEFAULT_RULES_YML = importlib.resources.files("comeit") / Path("default_rules.yml")
         self._OVERRIDE_RULES_YML = Path("comeit_config.yml")
         self._user_rules_yml = user_rules_yml
 
     def load_rules(self) -> list[RuleConfig]:
         try:
-            with importlib.resources.open_text("comeit", self._DEFAULT_RULES_YML) as f:
+            with self._DEFAULT_RULES_YML.open("r") as f:
                 rules_data = yaml.safe_load(f)
-
-            logger.debug(f"{rules_data=}")
 
             # Determine which file to use for overrides
             override_file = None
