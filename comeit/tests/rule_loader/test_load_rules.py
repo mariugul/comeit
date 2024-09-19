@@ -2,11 +2,11 @@ from pathlib import Path
 
 from comeit import RuleConfig, RuleLoader, Severity
 
-
 def test_load_rules_from_yml_file():
     """Verifies that rules can be loaded from the rules yaml file."""
     rules_yml = Path(__file__).parent / "rules.yml"
     rule_loader = RuleLoader(user_rules_yml=rules_yml)
+    rule_loader._DEFAULT_RULES_YML = rules_yml
     rules = rule_loader.load_rules()
 
     expected_list = [
@@ -21,10 +21,10 @@ def test_load_rules_from_yml_file():
         RuleConfig(
             id="02",
             description="Check header chars",
-            check="check_chars",
+            check="scope_chars",
             component="HEADER",
             severity=Severity.WARNING,
-            dependencies=["00", "01"],
+            dependencies=["01"],
         ),
     ]
 
