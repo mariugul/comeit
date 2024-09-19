@@ -54,15 +54,27 @@ class RuleManager:
         sorted_rules = self._topological_sort(graph, in_degree)
         logger.debug(f"{sorted_rules=}")
 
-        # Apply rules in sorted order
-        results: dict[str, bool | None] = {}
+        # Track the result of each rule
+        results: dict[str, RuleResult] = {}
+
         for rule_id in sorted_rules:
             rule = self._rules[rule_id]
 
+            # Check if any dependency of the current rule was ignored
+            if rule.dependencies:
+                dependency = rule.dependencies[0]
+                if results.get(dependency) == RuleResult.IGNORED:
+                    # If the dependency is ignored, mark this rule as ignored
+                    results[rule_id] = RuleResult.IGNORED
+                    logger.debug(f"Rule {rule_id} ignored due to dependency on {dependency}.")
+                    continue
+
+            # If the rule itself is set to be ignored
             if rule.severity == Severity.IGNORE:
                 results[rule_id] = RuleResult.IGNORED
                 continue
 
+            # Apply the rule and store the result
             result, rule.message = rule.apply()
             results[rule_id] = RuleResult.SUCCESS if result else RuleResult.FAILED
 
