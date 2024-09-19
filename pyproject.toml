@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "comeit"
-version = "0.3.0"
+version = "0.4.0"
 description = "A pure Python project enforcing conventional commits."
 authors = ["Marius Gulbrandsen <marius_gulbrandsen@hotmail.no>"]
 readme = "docs/README.md"
