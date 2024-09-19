@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.4.0](https://github.com/mariugul/comeit/compare/0.3.0...0.4.0) (2024-09-19)
+
+
+### Features
+
+* dependent rules are ignored ([e8eae36](https://github.com/mariugul/comeit/commit/e8eae368a73b36c3910cc6627da41e932c469fd9))
+
+
+### Documentation
+
+* add pypi install instructions to README.md ([2adfd70](https://github.com/mariugul/comeit/commit/2adfd706576655ac83a44779dcfad6bf225fafca))
+
 ## [0.3.0](https://github.com/mariugul/comeit/compare/0.2.1...0.3.0) (2024-09-19)
 
 
