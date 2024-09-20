@@ -13,6 +13,7 @@ from comeit import (
     RuleCreator,
     RuleLoader,
     RuleManager,
+    configure_logger,
 )
 from comeit.parse_args import parse_args
 
@@ -89,13 +90,9 @@ def commit_parser():
     """Parse out header, body and footer."""
 
 
-def configure_logger():
-    logging.basicConfig(level=logging.DEBUG)
-
-
 def main():
     args = parse_args()
-    configure_logger()
+    configure_logger(log_level=args.log_level)
 
     logger.info("Creating allowed commit types...")
     allowed_commit_types = create_commit_types()
