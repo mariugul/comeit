@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.5.0](https://github.com/mariugul/comeit/compare/0.4.0...0.5.0) (2024-09-20)
+
+
+### Features
+
+* log level input to CLI ([5e074a2](https://github.com/mariugul/comeit/commit/5e074a2a70cb9b1121532d78c5805bc1b83810d1))
+* parse commit message ([17d17d5](https://github.com/mariugul/comeit/commit/17d17d56b076b1285502891f63b20927be4b967d))
+
+
+### Documentation
+
+* document the cli inputs ([f9feb24](https://github.com/mariugul/comeit/commit/f9feb24e4a21ddf4fac5a193e03debbbbf0d3e98))
+
 ## [0.4.0](https://github.com/mariugul/comeit/compare/0.3.0...0.4.0) (2024-09-19)
 
 
