@@ -1,6 +1,7 @@
 from .checks.body import Body
 from .checks.footer import Footer
 from .checks.header import Header
+from .logger import LogLevel, configure_logger
 from .rules.rule import Component, Rule, Severity
 from .rules.rule_creator import RuleCreator
 from .rules.rule_loader import RuleConfig, RuleLoader
@@ -18,4 +19,6 @@ __all__ = [
     Rule.__name__,
     Component.__name__,
     Severity.__name__,
+    LogLevel.__name__,
+    configure_logger.__name__,
 ]
