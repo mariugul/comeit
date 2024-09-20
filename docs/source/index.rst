@@ -14,5 +14,6 @@ Lint git commits in a Conventional Commits manner in pure Python.
    :caption: Contents:
 
    get_started
+   cli
    user_config
    rules_config
