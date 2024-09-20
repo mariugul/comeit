@@ -85,7 +85,7 @@ jobs:
       if: steps.install.outcome == 'success'
       run: |
         set -o pipefail
-        poetry run pytest --maxfail=5 --disable-warnings 2>&1 | tee pytest.log
+        poetry run pytest -v --disable-warnings 2>&1 | tee pytest.log
 
     - name: Post Summary
       if: always()
