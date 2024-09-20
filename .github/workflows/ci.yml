@@ -118,6 +118,9 @@ jobs:
       id: install
       run: poetry install
 
+    - name: Run comeit Sanity
+      run: poetry run comeit --help
+
     - name: Run Comeit
       if: steps.install.outcome == 'success'
       run: |
