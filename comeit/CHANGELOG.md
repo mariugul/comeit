@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.1](https://github.com/mariugul/comeit/compare/0.5.0...0.5.1) (2024-09-20)
+
+
+### Documentation
+
+* add commit parser docs ([79e1675](https://github.com/mariugul/comeit/commit/79e16757c98f6e187e5181c532ad6eb9811332ee))
+
 ## [0.5.0](https://github.com/mariugul/comeit/compare/0.4.0...0.5.0) (2024-09-20)
 
 
