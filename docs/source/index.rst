@@ -18,3 +18,4 @@ Lint git commits in a Conventional Commits manner in pure Python.
    user_config
    rules_config
    commit_parser
+   commit_reader
