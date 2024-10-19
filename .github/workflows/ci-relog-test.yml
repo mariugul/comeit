@@ -1,0 +1,24 @@
+# Attempt to run the tests on the local machine
+
+name: CI Pipeline
+
+# Controls when the workflow will run
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+# Define the jobs that will run in the workflow
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Checkout the repository to the runner
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # Set up Python environment
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
