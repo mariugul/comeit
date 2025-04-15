@@ -45,21 +45,6 @@ def init_rules(
     return rules
 
 
-def parse_commit_message(commit_message: str):
-    lines = commit_message.strip().split("\n")
-    header = lines[0] if lines else ""
-    body = ""
-    footer = ""
-
-    if len(lines) > 1:
-        remaining = "\n".join(lines[1:])
-        parts = remaining.split("\n\n", 1)
-        body = parts[0].strip() if len(parts) > 0 else ""
-        footer = parts[1].strip() if len(parts) > 1 else ""
-
-    return header, body, footer
-
-
 def create_commit_types(extra_types: list[str] = None, custom_types: list[str] = None) -> set[str]:
     """Create commit types from default types and/or custom types or extra types.
 
